@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AddTaskScreen extends StatelessWidget {
+  final Function addTaskCallback;
+  AddTaskScreen(this.addTaskCallback);
 
   @override
   Widget build(BuildContext context) {
-    String newTask;
+    String newTaskTitle;
 
     //We need to wrap container inside container to be able to do corner radius.
     return Container(
@@ -36,7 +38,7 @@ class AddTaskScreen extends StatelessWidget {
               autofocus: true,
               textAlign: TextAlign.center,
               onChanged: (value) {
-                newTask = value;
+                newTaskTitle = value;
               },
             ),
             SizedBox(height: 20.0,),
@@ -49,7 +51,7 @@ class AddTaskScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.pop(context, newTask);
+                addTaskCallback(newTaskTitle);
               },
             )
           ],

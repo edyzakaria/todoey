@@ -9,8 +9,6 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  String newTask;
-
   List<Task> tasks = [];
 
   @override
@@ -20,8 +18,8 @@ class _TasksScreenState extends State<TasksScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightBlueAccent,
         child: Icon(Icons.add),
-        onPressed: () async {
-          newTask = await showModalBottomSheet(
+        onPressed: () {
+          showModalBottomSheet(
             context: context,
             isScrollControlled: true, //this is to set autofocus of the text field.
             //SingleChildScrollView is to determine the padding at the bottom using a MediaQuery.
@@ -29,15 +27,19 @@ class _TasksScreenState extends State<TasksScreen> {
               child: Container(
                 //this is to set the keyboard not covering the Add button.
                 padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: AddTaskScreen(),
+                child: AddTaskScreen((newTaskTitle){
+                  setState(() {
+                    if (newTaskTitle != null || newTaskTitle != "") {
+                      tasks.add(Task(name: newTaskTitle));
+                    }
+                  });
+                  //I can close the bottomsheet from here, since the context here is referring to bottomsheet.
+                  //or i can call this pop from the bottomsheet it self.
+                  Navigator.pop(context);
+                },),
               ),
             )
           );
-          setState(() {
-            if (newTask != null || newTask != "") {
-              tasks.add(Task(name: newTask));
-            }
-          });
         },
       ),
       body: Column(
@@ -70,7 +72,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                 ),
                 Text(
-                  tasks.length.toString(),
+                  "${tasks.length} tasks",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
