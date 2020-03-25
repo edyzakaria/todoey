@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:todoeyflutter/widgets/tasks_list.dart';
 import 'add_task_screen.dart';
+import 'package:todoeyflutter/models/task.dart';
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
+  @override
+  _TasksScreenState createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  String newTask;
+
+  List<Task> tasks = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,8 +20,8 @@ class TasksScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightBlueAccent,
         child: Icon(Icons.add),
-        onPressed: () {
-          showModalBottomSheet(
+        onPressed: () async {
+          newTask = await showModalBottomSheet(
             context: context,
             isScrollControlled: true, //this is to set autofocus of the text field.
             //SingleChildScrollView is to determine the padding at the bottom using a MediaQuery.
@@ -23,6 +33,11 @@ class TasksScreen extends StatelessWidget {
               ),
             )
           );
+          setState(() {
+            if (newTask != null || newTask != "") {
+              tasks.add(Task(name: newTask));
+            }
+          });
         },
       ),
       body: Column(
@@ -55,7 +70,7 @@ class TasksScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '12 tasks',
+                  tasks.length.toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -73,7 +88,7 @@ class TasksScreen extends StatelessWidget {
                     topRight: Radius.circular(20.0),
                     topLeft: Radius.circular(20.0)),
               ),
-              child: TasksList(),
+              child: TasksList(tasks: tasks,),
             ),
           ),
         ],

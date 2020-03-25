@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AddTaskScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+    String newTask;
+
     //We need to wrap container inside container to be able to do corner radius.
     return Container(
       color: Color(0xff757575),
@@ -32,6 +35,9 @@ class AddTaskScreen extends StatelessWidget {
             TextField(
               autofocus: true,
               textAlign: TextAlign.center,
+              onChanged: (value) {
+                newTask = value;
+              },
             ),
             SizedBox(height: 20.0,),
             FlatButton(
@@ -43,7 +49,7 @@ class AddTaskScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                //TODO define Add task function.
+                Navigator.pop(context, newTask);
               },
             )
           ],
