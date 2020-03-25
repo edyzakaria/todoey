@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoeyflutter/widgets/tasks_list.dart';
 import 'add_task_screen.dart';
-import 'package:todoeyflutter/models/task.dart';
+import 'package:todoeyflutter/models/task_data.dart';
 
-class TasksScreen extends StatefulWidget {
-  @override
-  _TasksScreenState createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-  List<Task> tasks = [];
+class TasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +22,7 @@ class _TasksScreenState extends State<TasksScreen> {
               child: Container(
                 //this is to set the keyboard not covering the Add button.
                 padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: AddTaskScreen((newTaskTitle){
-                  setState(() {
-                    if (newTaskTitle != null || newTaskTitle != "") {
-                      tasks.add(Task(name: newTaskTitle));
-                    }
-                  });
-                  //I can close the bottomsheet from here, since the context here is referring to bottomsheet.
-                  //or i can call this pop from the bottomsheet it self.
-                  Navigator.pop(context);
-                },),
+                child: AddTaskScreen(),
               ),
             )
           );
@@ -72,7 +58,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                 ),
                 Text(
-                  "${tasks.length} tasks",
+                  "${Provider.of<TaskData>(context).taskCount} tasks",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -90,7 +76,7 @@ class _TasksScreenState extends State<TasksScreen> {
                     topRight: Radius.circular(20.0),
                     topLeft: Radius.circular(20.0)),
               ),
-              child: TasksList(tasks: tasks,),
+              child: TasksList(),
             ),
           ),
         ],
